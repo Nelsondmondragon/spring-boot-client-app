@@ -31,6 +31,7 @@ public class ClientDaoRepositoryDto implements ClientDtoRepository {
 
     @Override
     public Optional<ClientDTO> getClientById(Integer id) {
+        System.out.println(clientDAO.findById(id));
         return clientDAO.findById(id).map(client -> clientDtoMapper.toClientDto(client));
     }
 
@@ -38,6 +39,7 @@ public class ClientDaoRepositoryDto implements ClientDtoRepository {
     public ClientDTO save(ClientDTO clientDTO) {
         return clientDtoMapper.toClientDto(clientDAO.save(clientDtoMapper.toClient(clientDTO)));
     }
+
 
     @Override
     public void delete(Integer id) {

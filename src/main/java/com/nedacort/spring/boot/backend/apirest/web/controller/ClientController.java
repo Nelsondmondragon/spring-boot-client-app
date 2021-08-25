@@ -7,14 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
 
     @GetMapping("/all")
     public ResponseEntity<List<ClientDTO>> getAll() {
@@ -33,9 +36,22 @@ public class ClientController {
         return new ResponseEntity<>(clientService.save(clientDTO), HttpStatus.CREATED);
     }
 
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ClientDTO> update(@RequestBody ClientDTO clientDTO, @PathVariable Integer id) {
+        ClientDTO clientDTOActual = clientService.getClientById(id).get();
+        clientDTOActual.setFirstName(clientDTO.getFirstName());
+        clientDTOActual.setSecondName(clientDTO.getSecondName());
+        clientDTOActual.setSurName(clientDTO.getSurName());
+        clientDTOActual.setSecondSurName(clientDTO.getSecondSurName());
+        clientDTOActual.setEmail(clientDTO.getEmail());
+        return new ResponseEntity<>(clientService.save(clientDTOActual), HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Integer id) {
         return clientService.delete(id) ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+
 
 }
